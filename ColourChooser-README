@@ -1,0 +1,95 @@
+NAME
+
+ColourChooser - Perl/Tk module providing a Colour selection dialogue box.
+
+SYNOPSIS
+
+    use Tk::ColourChooser ; 
+
+    eval {
+        my $col_dialog = $Window->ColourChooser ;
+        my $colour     = $col_dialog->Show ;
+        if( $colour ) {
+            # They pressed OK and the colour chosen is in $colour - could be
+            # transparent which is 'None' unless -transparent is set.
+        }
+        else {
+            # They cancelled.
+        }
+    }
+    if( $@ ) {
+        # Died because it couldn't find rgb.txt.
+    }
+
+    # May optionally have the colour initialised.
+    my $col_dialog = $Window->ColourChooser( -colour => 'green' ) ;
+    my $col_dialog = $Window->ColourChooser( -colour => '#0A057C' ) ;
+
+    # The title may also be overridden; and we can insist that only hex values
+    # are returned rather than colour names. We can disallow transparent.
+    my $col_dialog = $Window->ColourChooser( 
+                        -title       => 'Select a colour',
+                        -colour      => '0A057C',
+                        -transparent => 0,
+                        -hexonly     => 1,
+                        ) ;
+
+DESCRIPTION
+
+ColourChooser is a dialogue box which allows the user to pick a colour from
+the list in rgb.txt (supplied with X Windows), or to create a colour by
+setting RGB (red, green, blue) values with slider controls.
+
+You can scroll through all the named colours by using the <Down> and <Up>
+arrow keys on the keyboard.
+
+See the pod for full details.
+
+INSTALLATION
+
+ColourChooser.pm should be placed in any Tk directory in any lib directory in
+Perl's %INC path, for example, '/usr/lib/perl5/Tk'.
+
+ColourChooser looks for the file rgb.txt on your system - if it can't find it
+you will only be able to specify colours by RGB value.
+
+BUGS
+
+Scrolling with the mouse updates the list box, but not the background colour
+which shows what the chosen colour looks like. It should behave the same as
+scrolling with the <Down> and <Up> arrow keys.
+
+ColourChooser does almost no error checking.
+
+ColourChooser is slow to load because rgb.txt is large.
+
+CHANGES
+
+1999/01/29  First version.
+
+1999/02/15  Improved handling of initial colour so that it copes better with
+            the variety of valid colour name inputs.
+
+1999/02/17  If a colour is given as lowercase hex it is now properly
+            recognised.
+
+1999/02/23  Should now be Windows compatible.
+
+
+AUTHOR
+
+Mark Summerfield. I can be contacted as <mark.summerfield@chest.ac.uk> -
+please include the word 'colourchooser' in the subject line.
+
+The code draws from Stephen O. Lidie's work.
+
+COPYRIGHT
+
+Copyright (c) Mark Summerfield 1999. All Rights Reserved.
+
+This module may be used/distributed/modified under the same terms as Perl
+itself.
+
+
+
+

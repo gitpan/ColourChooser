@@ -1,6 +1,6 @@
 package Tk::ColourChooser ;    # Documented at the __END__.
 
-# $Id: ColourChooser.pm,v 1.13 1999/02/23 21:52:17 root Exp root $
+# $Id: ColourChooser.pm,v 1.15 1999/02/28 17:38:01 root Exp root $
 
 require 5.004 ;
 
@@ -13,7 +13,7 @@ require Tk::Toplevel ;
 
 use vars qw( $VERSION @ISA ) ;
 
-$VERSION = '1.06' ;
+$VERSION = '1.08' ;
 
 @ISA = qw( Tk::Toplevel ) ;
 
@@ -114,12 +114,7 @@ sub Populate {
             $win->{-blue}  = hex $3 ;
         }
         else {
-            my $hex = &name2hex( $win, $colour ) ;
-            if( defined $hex ) {
-                $win->{-red}   = hex( substr( $hex, 0, 2 ) ) ; 
-                $win->{-green} = hex( substr( $hex, 2, 2 ) ) ; 
-                $win->{-blue}  = hex( substr( $hex, 4, 2 ) ) ; 
-            }
+            ( $win->{-red}, $win->{-green}, $win->{-blue} ) = $win->rgb( $colour ) ; 
         }   
         &_set_colour( $win ) ; 
     }
@@ -451,28 +446,13 @@ Pressing Cancel will return an empty string.
 
 Cancel is pressed by a mouse click or <Escape> or <c> or <Control-c> or <Alt-c>.
 
-
-=head1 FOR DEVELOPERS
-
-There are two functions that developers can use in their own code to use some
-of ColourChooser's own functionality. If you have a colour name and want to
-convert that to hex you can do it thus:
-
-    # Load the rgb values, only needed once.
-    Tk::ColourChooser::read_rgb( $Win ) ; 
-        ...
-    # Now we can do lookups.
-    my $hex = Tk::ColourChooser::name2hex( $Win, $colour_name ) ;
-
-See pixmaped (pixmaped-gif.pl - _colour2rgb) for an example of this.
-
 =head1 INSTALLATION
 
 ColourChooser.pm should be placed in any Tk directory in any lib directory in
 Perl's %INC path, for example, '/usr/lib/perl5/Tk'.
 
-ColourChooser looks for the file rgb.txt on your system - it won't work if it
-can't find it!
+ColourChooser looks for the file rgb.txt on your system - if it can't find it
+you will only be able to specify colours by RGB value.
 
 =head1 BUGS
 
