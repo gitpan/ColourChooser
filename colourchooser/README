@@ -41,7 +41,7 @@ the list in rgb.txt (supplied with X Windows), or to create a colour by
 setting RGB (red, green, blue) values with slider controls.
 
 You can scroll through all the named colours by using the <Down> and <Up>
-arrow keys on the keyboard.
+arrow keys on the keyboard or by using the scrollbar.
 
 See the pod for full details.
 
@@ -75,6 +75,9 @@ CHANGES
 
 1999/02/23  Should now be Windows compatible.
 
+1999/03/02  Now when you scroll with the scrollbar both the colourname and the
+            colour shown are updated (the same as when you move up and down
+            with the arrow keys).
 
 AUTHOR
 

@@ -11,8 +11,8 @@ my $colour = 'white' ;
 while( 1 ) {
     my $col_dialog = $Win->ColourChooser( -colour => $colour, ) ;
     $colour        = $col_dialog->Show ;
-    exit unless $colour ;
     print STDERR "[$colour]\n" ;
+    exit unless $colour ;
 }
 
 MainLoop ;
