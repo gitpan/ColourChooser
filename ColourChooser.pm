@@ -1,6 +1,6 @@
 package Tk::ColourChooser ;    # Documented at the __END__.
 
-# $Id: ColourChooser.pm,v 1.18 1999/03/09 20:21:30 root Exp root $
+# $Id: ColourChooser.pm,v 1.19 1999/04/21 19:57:45 root Exp $
 
 require 5.004 ;
 
@@ -13,7 +13,7 @@ require Tk::Toplevel ;
 
 use vars qw( $VERSION @ISA ) ;
 
-$VERSION = '1.11' ;
+$VERSION = '1.12' ;
 
 @ISA = qw( Tk::Toplevel ) ;
 
@@ -37,7 +37,7 @@ sub Populate {
     $win->protocol( 'WM_DELETE_WINDOW' => sub { } ) ;
     $win->transient( $win->toplevel ) ;
     
-    &read_rgb( $win ) ;
+    &_read_rgb( $win ) ;
     
     # Create listbox.
     my $Frame     = $win->Frame()->pack( -fill => 'x' ) ;
@@ -115,7 +115,7 @@ sub Populate {
             $win->{-blue}  = hex $3 ;
         }
         else {
-            my $hex = &name2hex( $win, $colour ) ;
+            my $hex = &_name2hex( $win, $colour ) ;
             $win->{-red}   = hex substr( $hex, 0, 2 ) ; 
             $win->{-green} = hex substr( $hex, 2, 2 ) ; 
             $win->{-blue}  = hex substr( $hex, 4, 2 ) ;
@@ -124,18 +124,6 @@ sub Populate {
     }
  
     $win->{-colour} = undef ;
-}
-
-
-#############################
-sub _listbox_scroll {
-    my( $scrollbar, $list, $win, @args ) = @_ ;
-
-    $scrollbar->set( @args ) ;
-    my $index = int( $list->size * $args[0] ) ;
-    $list->activate( $index ) ;
-    $list->selectionSet( $index ) ;
-    &_set_colour_from_list( $list, $win ) ; 
 }
 
 
@@ -165,7 +153,7 @@ sub _by_colour {
 
 
 #############################
-sub name2hex {
+sub _name2hex {
 
     my $win    = shift ;
     my $colour = shift ;
@@ -232,7 +220,7 @@ sub _find_rgb {
 
 
 #############################
-sub read_rgb {
+sub _read_rgb {
     my $win = shift ;
 
     my $file = &_find_rgb ;
@@ -260,11 +248,23 @@ sub read_rgb {
 
 
 #############################
+sub _listbox_scroll {
+    my( $scrollbar, $list, $win, @args ) = @_ ;
+
+    $scrollbar->set( @args ) ;
+    my $index = int( $list->size * $args[0] ) ;
+    $list->activate( $index ) ;
+    $list->selectionSet( $index ) ;
+}
+
+
+#############################
 sub _set_colour {
     my $win = shift ;
 
     my $hex = sprintf "%02X%02X%02X", 
                 $win->{-red}, $win->{-green}, $win->{-blue} ;
+
     my $index = 0 ;
     if( exists $win->{HEX}{$hex} ) {
         my $list = $win->{COLOUR_LIST} ;
@@ -377,15 +377,15 @@ ColourChooser - Perl/Tk module providing a Colour selection dialogue box.
 
     use Tk::ColourChooser ; 
 
-	my $col_dialog = $Window->ColourChooser ;
-	my $colour     = $col_dialog->Show ;
-	if( $colour ) {
-		# They pressed OK and the colour chosen is in $colour - could be
-		# transparent which is 'None' unless -transparent is set to 0.
-	}
-	else {
-		# They cancelled.
-	}
+    my $col_dialog = $Window->ColourChooser ;
+    my $colour     = $col_dialog->Show ;
+    if( $colour ) {
+        # They pressed OK and the colour chosen is in $colour - could be
+        # transparent which is 'None' unless -transparent is set.
+    }
+    else {
+        # They cancelled.
+    }
 
     # May optionally have the colour initialised.
     my $col_dialog = $Window->ColourChooser( -colour => 'green' ) ;
@@ -407,7 +407,8 @@ the list in rgb.txt (supplied with X Windows), or to create a colour by
 setting RGB (red, green, blue) values with slider controls.
 
 You can scroll through all the named colours by using the <Down> and <Up>
-arrow keys on the keyboard or by clicking the mouse on the scrollbar.
+arrow keys on the keyboard or by clicking the mouse on the scrollbar and then
+clicking the colour list.
 
 =head2 Options
 
@@ -469,7 +470,7 @@ you will only be able to specify colours by RGB value.
 
 ColourChooser does almost no error checking.
 
-ColourChooser is slow to load because rgb.txt is large.
+ColourChooser can be slow to load because rgb.txt is large.
 
 =head1 CHANGES
 
@@ -487,9 +488,9 @@ ColourChooser is slow to load because rgb.txt is large.
             colour shown are updated (the same as when you move up and down
             with the arrow keys).
 
-1999/03/09  Will not die if you don't have rgb.txt - just that all your
-            colours will be 'Unnamed', so you can only set via the RGB
-            sliders.
+1999/04/21  Updating the colour when you move the scrollbar with the mouse 
+            is buggy -- can't figure out why so have reverted.
+
 
 =head1 AUTHOR
 
