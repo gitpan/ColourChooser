@@ -1,6 +1,6 @@
 package Tk::ColourChooser ;    # Documented at the __END__.
 
-# $Id: ColourChooser.pm,v 1.17 1999/03/02 21:02:00 root Exp root $
+# $Id: ColourChooser.pm,v 1.18 1999/03/09 20:21:30 root Exp root $
 
 require 5.004 ;
 
@@ -13,7 +13,7 @@ require Tk::Toplevel ;
 
 use vars qw( $VERSION @ISA ) ;
 
-$VERSION = '1.10' ;
+$VERSION = '1.11' ;
 
 @ISA = qw( Tk::Toplevel ) ;
 
@@ -377,20 +377,15 @@ ColourChooser - Perl/Tk module providing a Colour selection dialogue box.
 
     use Tk::ColourChooser ; 
 
-    eval {
-        my $col_dialog = $Window->ColourChooser ;
-        my $colour     = $col_dialog->Show ;
-        if( $colour ) {
-            # They pressed OK and the colour chosen is in $colour - could be
-            # transparent which is 'None' unless -transparent is set.
-        }
-        else {
-            # They cancelled.
-        }
-    }
-    if( $@ ) {
-        # Died because it couldn't find rgb.txt.
-    }
+	my $col_dialog = $Window->ColourChooser ;
+	my $colour     = $col_dialog->Show ;
+	if( $colour ) {
+		# They pressed OK and the colour chosen is in $colour - could be
+		# transparent which is 'None' unless -transparent is set to 0.
+	}
+	else {
+		# They cancelled.
+	}
 
     # May optionally have the colour initialised.
     my $col_dialog = $Window->ColourChooser( -colour => 'green' ) ;
@@ -492,6 +487,9 @@ ColourChooser is slow to load because rgb.txt is large.
             colour shown are updated (the same as when you move up and down
             with the arrow keys).
 
+1999/03/09  Will not die if you don't have rgb.txt - just that all your
+            colours will be 'Unnamed', so you can only set via the RGB
+            sliders.
 
 =head1 AUTHOR
 
